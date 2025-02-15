@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>Flask Chat</title>
+    {{ bootstrap.load_css() }}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="{{ body_class }}">
+    {% if 'api_key' not in session %}
+    <!-- API Key Modal -->
+    <div
+      class="modal fade show"
+      id="apiKeyModal"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      style="display: block"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+          <div class="modal-header border-secondary">
+            <h5 class="modal-title">Enter OpenAI API Key</h5>
+          </div>
+          <div class="modal-body">
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %} {% with message = messages[-1] %}
+            <div
+              class="alert alert-{{ message[0] }} alert-dismissible fade show"
+              role="alert"
+            >
+              {{ message[1] }}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+            {% endwith %} {% endif %} {% endwith %}
+
+            <form method="POST" action="{{ url_for('submit_api_key') }}">
+              <div class="mb-3">
+                <input
+                  type="text"
+                  name="api_key"
+                  class="form-control bg-dark text-light"
+                  placeholder="sk-..."
+                  required
+                />
+              </div>
+              <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="remember"
+                  name="remember"
+                />
+                <label class="form-check-label" for="remember">
+                  Remember API key
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal backdrop -->
+    <div class="modal-backdrop fade show"></div>
+    {% endif %}
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Auto-dismiss alerts after 3 seconds
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          var alerts = document.querySelectorAll(".alert");
+          alerts.forEach(function (alert) {
+            var bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+          });
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>
