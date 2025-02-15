@@ -19,7 +19,7 @@ A modern Flask-based AI chatbot that uses the OpenAI API to provide intelligent 
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/unknownTheFirst/AI-chat-website-.git
+git clone https://github.com/Xelpi-Code/AI-chatbot-website-.git
 cd AI-chat-website-
 ```
 
